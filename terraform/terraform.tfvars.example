@@ -1,0 +1,32 @@
+# Copy this file to terraform.tfvars and fill in the values.
+# terraform.tfvars is gitignored — never commit real credentials.
+
+# AWS region to deploy into
+aws_region = "us-east-1"
+
+# "test" or "prod" — matches the old Pulumi stack names
+environment = "test"
+
+# Path to kubeconfig for the EKS cluster.
+# Obtain from the platform stack:
+#   pulumi stack output kubeconfig > kubeconfig          (if platform stack is still Pulumi)
+#   terraform output kubeconfig > kubeconfig             (once platform stack is Terraform)
+kubeconfig_path = "./kubeconfig"
+
+# DB endpoints from the zephyr-data stack.
+# Obtain from:
+#   pulumi stack -C ../zephyr-data output catalogDbEndpoint
+#   pulumi stack -C ../zephyr-data output ordersDbEndpoint
+catalog_db_endpoint = "mydb-catalog.cluster-xxxx.us-east-1.rds.amazonaws.com"
+orders_db_endpoint  = "mydb-orders.cluster-xxxx.us-east-1.rds.amazonaws.com"
+
+# Database passwords — use a secrets manager in production.
+catalog_db_password = "change_me"
+orders_db_password  = "change_me"
+
+# Tag for locally built images. Bump this to force a rebuild on next apply.
+app_image_tag = "latest"
+
+# ── Only needed after migrating platform/data stacks to Terraform ─────────────
+# platform_state_bucket = "my-terraform-state"
+# data_state_bucket     = "my-terraform-state"

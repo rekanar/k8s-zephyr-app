@@ -1,0 +1,39 @@
+# Copy to terraform.tfvars and fill in values.
+# Never commit terraform.tfvars — it is gitignored.
+
+aws_region   = "us-east-1"
+environment  = "test"
+cluster_name = "zephyr-eks"
+
+# Kubernetes version — check available versions:
+#   aws eks describe-addon-versions --query 'addons[0].addonVersions[].compatibilities[].clusterVersion' --output text | tr '\t' '\n' | sort -u
+cluster_version = "1.29"
+
+# ── Networking ─────────────────────────────────────────────────────────────────
+vpc_cidr  = "10.0.0.0/16"
+az_count  = 3
+
+# Restrict public API access to your office/VPN CIDRs in production:
+cluster_endpoint_public_access       = true
+cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"]  # tighten in prod
+
+# ── Node groups ────────────────────────────────────────────────────────────────
+system_node_instance_types = ["t3.medium"]
+system_nodes_min           = 1
+system_nodes_max           = 3
+system_nodes_desired       = 2
+
+app_node_instance_types = ["t3.large"]
+app_nodes_min           = 2
+app_nodes_max           = 10
+app_nodes_desired       = 3
+
+# ── Logging ────────────────────────────────────────────────────────────────────
+cloudwatch_log_retention_days = 30
+
+# ── Add-ons ────────────────────────────────────────────────────────────────────
+# Check latest at: helm search repo autoscaler/cluster-autoscaler
+cluster_autoscaler_version = "9.37.0"
+
+# Check latest at: helm search repo eks/aws-load-balancer-controller
+aws_lbc_version = "1.7.2"

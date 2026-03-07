@@ -4,6 +4,13 @@ This is the source repository for the online store of the Zephyr Archaeotech Emp
 
 This application is based on [this source repository](https://github.com/aws-containers/retail-store-sample-app); the original `README.md` for the source is now found in the `/docs` folder.
 
+## Deploying with Terraform
+
+[Instructions for using Terraform](terraform/README.md) to deploy this application and its associated AWS/EKS infrastructure can be found in the `terraform` folder. The Terraform code is organized into two stacks:
+
+* **EKS Platform** (`terraform/eks-platform/`) — provisions the EKS cluster, VPC, IAM, and add-ons.
+* **Application** (`terraform/`) — builds container images and deploys all Kubernetes workloads.
+
 ## Deploying with Pulumi
 
 [Instructions for using Pulumi](infra/README.md) to deploy this application and its associated infrastructure can be found in the `infra` folder.

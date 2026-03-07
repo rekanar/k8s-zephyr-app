@@ -133,6 +133,7 @@ resource "aws_route_table_association" "private" {
 resource "aws_cloudwatch_log_group" "vpc_flow_logs" {
   name              = "/aws/vpc/${var.cluster_name}/flow-logs"
   retention_in_days = var.cloudwatch_log_retention_days
+  kms_key_id        = aws_kms_key.cloudwatch.arn
 }
 
 resource "aws_iam_role" "vpc_flow_logs" {
@@ -163,7 +164,10 @@ resource "aws_iam_role_policy" "vpc_flow_logs" {
         "logs:DescribeLogGroups",
         "logs:DescribeLogStreams"
       ]
-      Resource = "*"
+      Resource = [
+        "${aws_cloudwatch_log_group.vpc_flow_logs.arn}",
+        "${aws_cloudwatch_log_group.vpc_flow_logs.arn}:*"
+      ]
     }]
   })
 }

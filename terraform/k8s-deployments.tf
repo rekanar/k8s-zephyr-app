@@ -64,7 +64,9 @@ resource "kubernetes_deployment" "assets" {
             capabilities {
               drop = ["ALL"]
             }
-            read_only_root_filesystem = false
+            read_only_root_filesystem = true
+            run_as_non_root           = true
+            run_as_user               = 1000
           }
 
           volume_mount {
@@ -135,6 +137,12 @@ resource "kubernetes_deployment" "carts" {
           env_from {
             config_map_ref {
               name = kubernetes_config_map.carts.metadata[0].name
+            }
+          }
+
+          env_from {
+            secret_ref {
+              name = kubernetes_secret.carts_dynamodb.metadata[0].name
             }
           }
 
@@ -215,6 +223,11 @@ resource "kubernetes_deployment" "carts_dynamodb" {
             name           = "dynamodb"
             container_port = 8000
             protocol       = "TCP"
+          }
+
+          resources {
+            limits   = { cpu = "256m", memory = "256Mi" }
+            requests = { cpu = "64m", memory = "128Mi" }
           }
         }
       }
@@ -495,6 +508,11 @@ resource "kubernetes_deployment" "checkout_redis" {
             container_port = 6379
             protocol       = "TCP"
           }
+
+          resources {
+            limits   = { cpu = "128m", memory = "128Mi" }
+            requests = { cpu = "64m", memory = "64Mi" }
+          }
         }
       }
     }
@@ -705,6 +723,11 @@ resource "kubernetes_deployment" "rabbitmq" {
             container_port = 15672
             protocol       = "TCP"
           }
+
+          resources {
+            limits   = { cpu = "256m", memory = "512Mi" }
+            requests = { cpu = "128m", memory = "256Mi" }
+          }
         }
       }
     }
@@ -784,7 +807,6 @@ resource "kubernetes_deployment" "ui" {
 
           security_context {
             capabilities {
-              add  = ["NET_BIND_SERVICE"]
               drop = ["ALL"]
             }
             read_only_root_filesystem = true

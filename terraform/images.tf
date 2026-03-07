@@ -9,8 +9,6 @@ locals {
   ui_image_uri      = "${aws_ecr_repository.zephyr.repository_url}:ui-${var.app_image_tag}"
 }
 
-data "aws_ecr_authorization_token" "token" {}
-
 # Log in to ECR before any image build.
 resource "null_resource" "ecr_login" {
   triggers = {
@@ -19,7 +17,7 @@ resource "null_resource" "ecr_login" {
   }
 
   provisioner "local-exec" {
-    command = "echo ${data.aws_ecr_authorization_token.token.password} | docker login --username AWS --password-stdin ${aws_ecr_repository.zephyr.repository_url}"
+    command = "aws ecr get-login-password --region ${var.aws_region} | docker login --username AWS --password-stdin ${aws_ecr_repository.zephyr.repository_url}"
   }
 }
 

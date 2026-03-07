@@ -24,6 +24,24 @@ resource "kubernetes_secret" "catalog_db" {
   }
 }
 
+# Carts DynamoDB Local credentials — kept in a Secret (not ConfigMap) to avoid
+# exposing credential keys in plain sight. The local DynamoDB does not validate
+# these values, but the pattern should mirror production practice.
+resource "kubernetes_secret" "carts_dynamodb" {
+  metadata {
+    name      = "carts-dynamodb"
+    namespace = kubernetes_namespace.carts.metadata[0].name
+    labels    = local.component_labels.carts
+  }
+
+  type = "Opaque"
+
+  data = {
+    AWS_ACCESS_KEY_ID     = "local-key"
+    AWS_SECRET_ACCESS_KEY = "local-secret"
+  }
+}
+
 resource "kubernetes_secret" "orders_db" {
   metadata {
     name      = "orders-db"

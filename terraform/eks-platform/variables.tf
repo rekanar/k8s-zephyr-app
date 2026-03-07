@@ -81,9 +81,9 @@ variable "cluster_log_types" {
 }
 
 variable "cloudwatch_log_retention_days" {
-  description = "CloudWatch log group retention period."
+  description = "CloudWatch log group retention period in days. Minimum 90 days recommended for audit compliance."
   type        = number
-  default     = 30
+  default     = 90
 }
 
 # ── Add-ons ───────────────────────────────────────────────────────────────────

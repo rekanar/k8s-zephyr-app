@@ -18,8 +18,6 @@ resource "kubernetes_config_map" "carts" {
   }
 
   data = {
-    AWS_ACCESS_KEY_ID          = "key"
-    AWS_SECRET_ACCESS_KEY      = "secret"
     CARTS_DYNAMODB_CREATETABLE = "true"
     CARTS_DYNAMODB_ENDPOINT    = "http://carts-dynamodb:8000"
     CARTS_DYNAMODB_TABLENAME   = "Items"

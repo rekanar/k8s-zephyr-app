@@ -40,17 +40,25 @@ variable "orders_db_endpoint" {
 }
 
 variable "catalog_db_password" {
-  description = "Password for the catalog database user."
+  description = "Password for the catalog database user. Provide via tfvars or TF_VAR_catalog_db_password — never hardcode."
   type        = string
   sensitive   = true
-  default     = "default_password"
+
+  validation {
+    condition     = length(var.catalog_db_password) >= 16
+    error_message = "catalog_db_password must be at least 16 characters."
+  }
 }
 
 variable "orders_db_password" {
-  description = "Password for the orders database user."
+  description = "Password for the orders database user. Provide via tfvars or TF_VAR_orders_db_password — never hardcode."
   type        = string
   sensitive   = true
-  default     = "default_password"
+
+  validation {
+    condition     = length(var.orders_db_password) >= 16
+    error_message = "orders_db_password must be at least 16 characters."
+  }
 }
 
 # ── Image configuration ────────────────────────────────────────────────────────

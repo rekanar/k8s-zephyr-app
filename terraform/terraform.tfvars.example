@@ -20,9 +20,12 @@ kubeconfig_path = "./kubeconfig"
 catalog_db_endpoint = "mydb-catalog.cluster-xxxx.us-east-1.rds.amazonaws.com"
 orders_db_endpoint  = "mydb-orders.cluster-xxxx.us-east-1.rds.amazonaws.com"
 
-# Database passwords — use a secrets manager in production.
-catalog_db_password = "change_me"
-orders_db_password  = "change_me"
+# Database passwords — NEVER commit real values. Supply via environment variables:
+#   export TF_VAR_catalog_db_password="$(aws secretsmanager get-secret-value ...)"
+#   export TF_VAR_orders_db_password="$(aws secretsmanager get-secret-value ...)"
+# Or set strong values (≥16 chars) in a gitignored terraform.tfvars file.
+# catalog_db_password = ""
+# orders_db_password  = ""
 
 # Tag for locally built images. Bump this to force a rebuild on next apply.
 app_image_tag = "latest"

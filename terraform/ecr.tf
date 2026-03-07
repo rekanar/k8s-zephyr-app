@@ -2,7 +2,7 @@ data "aws_caller_identity" "current" {}
 
 resource "aws_ecr_repository" "zephyr" {
   name                 = "zephyr-app-${var.environment}"
-  image_tag_mutability = "MUTABLE"
+  image_tag_mutability = "IMMUTABLE"
 
   # Mirrors Pulumi's forceDelete = true — allows destroy even when images exist.
   force_delete = true

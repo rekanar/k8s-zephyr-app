@@ -1,0 +1,5 @@
+node_modules/
+recordings/
+*.webm
+*.mp3
+.env
